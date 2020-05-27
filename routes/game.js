@@ -13,7 +13,6 @@ router.post('/creategame', protect, creategame);
 router.put('/attack', protect, attack);
 router.put('/powerattack', protect, powerattack);
 router.post('/healingpotion', protect, healingpotion);
-// router.post('/surrender', protect, surrender);
-// router.get('/health', protect, health);
+router.post('/surrender', protect, surrender);
 
 module.exports = router;

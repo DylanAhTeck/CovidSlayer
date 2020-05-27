@@ -146,6 +146,38 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
   }
 });
 
+// @desc    Surrender -
+// @route   POST /api/v1/game/surrender
+// @access  Private
+
+exports.surrender = asyncHandler(async (req, res, next) => {
+  try {
+    let game = await Game.findById(req.body.game._id);
+    if (!game) return res.status(404).json({ msg: 'not authorized' });
+
+    // Make sure user owns contact
+    // Possibly change L34 to req.user.id?
+    if (game.user.toString() !== req.body.user._id) {
+      return res.status(401).json({ msg: 'Not authorized' });
+    }
+
+    game.userhealth = 0;
+
+    const log = req.log;
+    const comm = `GAME OVER. The player surrenders.`;
+
+    game = await Game.findByIdAndUpdate(
+      req.body.game.id,
+      { $set: game },
+      { new: true }
+    );
+
+    res.status(200).json({ game, comm });
+  } catch (err) {
+    next(err);
+  }
+});
+
 const GameEndTest = (game, res) => {
   if (game.userhealth <= 0 && game.covidhealth > 0)
     res.status(200).json({ game, end: true, winner: 'covid' });
