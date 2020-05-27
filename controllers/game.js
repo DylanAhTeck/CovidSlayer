@@ -146,7 +146,7 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @desc    Surrender -
+// @desc    Surrender
 // @route   POST /api/v1/game/surrender
 // @access  Private
 
