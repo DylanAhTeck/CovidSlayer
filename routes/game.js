@@ -1,5 +1,10 @@
 const express = require('express');
-const { creategame, attack } = require('../controllers/game');
+const {
+  creategame,
+  attack,
+  powerattack,
+  healingpotion
+} = require('../controllers/game');
 
 const { protect } = require('../middleware/auth');
 const router = express.Router();

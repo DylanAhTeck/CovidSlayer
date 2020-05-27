@@ -26,26 +26,30 @@ exports.creategame = asyncHandler(async (req, res, next) => {
 exports.attack = asyncHandler(async (req, res, next) => {
   try {
     let game = await Game.findById(req.body.game.id);
+    //let game = await Game.findById('5ece3e501eab4f0ebf1c3c03');
+
     if (!game) return res.status(404).json({ msg: 'not authorized' });
 
     // Make sure user owns contact
     // Possibly change L34 to req.user.id?
 
-    if (game.user.toString() !== req.body.user.id) {
-      return res.status(401).json({ msg: 'Not authorized' });
-    }
+    // if (game.user.toString() !== req.body.user.id) {
+    //   return res.status(401).json({ msg: 'Not authorized' });
+    // }
 
     const covid_damage = Math.floor(Math.random() * 11);
     const user_damage = Math.floor(Math.random() * 11);
 
-    game.userhealth = game.userhealth - covid_damage;
-    game.covidhealth = game.covidhealth - user_damage;
+    game.userhealth = Math.max(game.userhealth - covid_damage, 0);
+    game.covidhealth = Math.max(game.covidhealth - user_damage, 0);
 
     game = await Game.findByIdAndUpdate(
       req.body.game.id,
       { $set: game },
       { new: true }
     );
+
+    GameEndTest(game, res);
 
     res.status(200).json({ game, msg: 'Attack action successful' });
   } catch (err) {
@@ -71,14 +75,16 @@ exports.powerattack = asyncHandler(async (req, res, next) => {
     const covid_damage = Math.floor(Math.random() * 21) + 10;
     const user_damage = Math.floor(Math.random() * 21) + 10;
 
-    game.userhealth = game.userhealth - covid_damage;
-    game.covidhealth = game.covidhealth - user_damage;
+    game.userhealth = Math.max(game.userhealth - covid_damage, 0);
+    game.covidhealth = Math.max(game.covidhealth - user_damage, 0);
 
     game = await Game.findByIdAndUpdate(
       req.body.game.id,
       { $set: game },
       { new: true }
     );
+
+    GameEndTest(game, res);
 
     res.status(200).json({ game, msg: 'Attack action successful' });
   } catch (err) {
@@ -106,7 +112,10 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
       Math.random() * (game.userhealth + health_increase)
     );
 
-    game.userhealth = game.userhealth - user_damage + health_increase;
+    game.userhealth = Math.max(
+      game.userhealth - user_damage + health_increase,
+      0
+    );
 
     game = await Game.findByIdAndUpdate(
       req.body.game.id,
@@ -114,8 +123,19 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
       { new: true }
     );
 
+    GameEndTest(game, res);
+
     res.status(200).json({ game, msg: 'Attack action successful' });
   } catch (err) {
     next(err);
   }
 });
+
+const GameEndTest = (game, res) => {
+  if (game.userhealth <= 0 && game.covidhealth > 0)
+    res.status(200).json({ game, end: true, winner: 'covid' });
+  else if (game.userhealth > 0 && game.covidhealth <= 0)
+    res.status(200).json({ game, end: true, winner: 'user' });
+  else if (game.userhealth <= 0 && game.covidhealth <= 0)
+    res.status(200).json({ game, end: true, winner: 'none' });
+};
