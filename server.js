@@ -19,6 +19,7 @@ connectDB();
 
 //Route files
 const auth = require('./routes/auth.js');
+const game = require('./routes/game.js');
 
 const PORT = process.env.PORT || 5000;
 
@@ -32,6 +33,7 @@ app.use(cookieParser());
 
 //Mount routers
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/game', game);
 
 app.use(errorHandler);
 

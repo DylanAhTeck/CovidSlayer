@@ -2,14 +2,22 @@ const mongoose = require('mongoose');
 
 const GameSchema = new mongoose.Schema({
   covidhealth: {
-    type: int,
+    type: Number,
     default: 100,
     required: true
   },
   playerhealth: {
-    type: int,
+    type: Number,
     default: 100,
     required: true
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  date: {
+    type: Date,
+    default: Date.now
   }
 });
 
