@@ -58,7 +58,7 @@ const AuthState = props => {
     }
     try {
       const res = await axios.get('/api/v1/auth/login');
-
+      console.log('here');
       dispatch({
         type: USER_LOADED,
         payload: res.data
@@ -70,7 +70,33 @@ const AuthState = props => {
     }
   };
 
+  // Login user
+  const loginUser = async formData => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    try {
+      const res = await axios.post('/api/v1/auth/login', formData, config);
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data
+      });
+
+      loadUser();
+    } catch (err) {
+      dispatch({
+        type: LOGIN_FAIL
+        //Add message here
+      });
+    }
+  };
+
   // Logout
+  // eslint-disable-next-line
   const logout = () => dispatch({ type: LOGOUT });
 
   // Clear Errors
@@ -86,6 +112,7 @@ const AuthState = props => {
         error: state.error,
         register,
         loadUser,
+        loginUser,
         clearErrors
       }}
     >

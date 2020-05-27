@@ -15,7 +15,7 @@ const Register = props => {
     if (error) {
       clearErrors();
       return alert('Error: ' + error);
-    }
+    } // eslint-disable-next-line
   }, [error, isAuthenticated, props.history]);
 
   const [user, setUser] = useState({

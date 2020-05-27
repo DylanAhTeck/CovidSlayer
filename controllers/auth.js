@@ -31,7 +31,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     // Validate avatar and email
     if (!avatar || !password) {
       return next(
-        new ErrorResponse('Please provide an email and password', 400)
+        new ErrorResponse('Please provide an avatar and password', 400)
       );
     }
 
@@ -53,6 +53,20 @@ exports.login = asyncHandler(async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+// @desc    Get user details
+// @route   GET /api/v1/auth/login
+// @access  Private
+
+exports.getUser = asyncHandler(async (req, res, next) => {
+  const user = req.user;
+
+  console.log(user);
+  res.status(200).json({
+    success: true,
+    data: user
+  });
 });
 
 const sendTokenResponse = (user, statusCode, res) => {

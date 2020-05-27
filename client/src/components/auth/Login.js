@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import AuthContext from '../../context/auth/authContext';
 
-const Login = () => {
+const Login = props => {
+  const authContext = useContext(AuthContext);
+
+  const { loginUser, error, clearErrors, isAuthenticated } = authContext;
+
   const [user, setUser] = useState({
     avatar: '',
     password: ''
   });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      props.history.push('/');
+    }
+
+    if (error) {
+      clearErrors();
+      return alert('Error: Invalid Credentials');
+    } // eslint-disable-next-line
+  }, [error, isAuthenticated, props.history]);
 
   const { avatar, password } = user;
 
@@ -12,7 +28,10 @@ const Login = () => {
 
   const onSubmit = e => {
     e.preventDefault();
-    console.log('Register submit');
+
+    loginUser({ avatar, password });
+
+    console.log('Login submit');
   };
   return (
     <div>
@@ -22,7 +41,13 @@ const Login = () => {
       <form onSubmit={onSubmit}>
         <div className='form-group'>
           <label htmlFor='avatar'>Avatar</label>
-          <input type='text' name='avatar' value={avatar} onChange={onChange} />
+          <input
+            type='text'
+            name='avatar'
+            value={avatar}
+            onChange={onChange}
+            required
+          />
         </div>
         <div className='form-group'>
           <label htmlFor='password'>Password</label>
@@ -31,6 +56,7 @@ const Login = () => {
             name='password'
             value={password}
             onChange={onChange}
+            required
           />
         </div>
         <input
