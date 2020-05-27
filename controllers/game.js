@@ -19,7 +19,7 @@ exports.creategame = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @desc    Attack
+// @desc    Attack - inflict between 0-10 damage
 // @route   PUT /api/v1/game/attack
 // @access  Private
 
@@ -31,9 +31,9 @@ exports.attack = asyncHandler(async (req, res, next) => {
     // Make sure user owns contact
     // Possibly change L34 to req.user.id?
 
-    // if (game.user.toString() !== req.body.user.id) {
-    //   return res.status(401).json({ msg: 'Not authorized' });
-    // }
+    if (game.user.toString() !== req.body.user.id) {
+      return res.status(401).json({ msg: 'Not authorized' });
+    }
 
     const covid_damage = Math.floor(Math.random() * 11);
     const user_damage = Math.floor(Math.random() * 11);
@@ -53,19 +53,68 @@ exports.attack = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @desc    Get user details
-// @route   GET /api/v1/auth/login
+// @desc    Power attack - inflict between 10-30 damange
+// @route   PUT /api/v1/game/powerattack
 // @access  Private
 
-exports.getUser = asyncHandler(async (req, res, next) => {
-  const avatar = req.avatar;
-
+exports.powerattack = asyncHandler(async (req, res, next) => {
   try {
-    const user = await User.findOne({ avatar }).select();
-    res.status(200).json({
-      success: true,
-      data: user
-    });
+    let game = await Game.findById(req.body.game.id);
+    if (!game) return res.status(404).json({ msg: 'not authorized' });
+
+    // Make sure user owns contact
+    // Possibly change L34 to req.user.id?
+    if (game.user.toString() !== req.body.user.id) {
+      return res.status(401).json({ msg: 'Not authorized' });
+    }
+
+    const covid_damage = Math.floor(Math.random() * 21) + 10;
+    const user_damage = Math.floor(Math.random() * 21) + 10;
+
+    game.userhealth = game.userhealth - covid_damage;
+    game.covidhealth = game.covidhealth - user_damage;
+
+    game = await Game.findByIdAndUpdate(
+      req.body.game.id,
+      { $set: game },
+      { new: true }
+    );
+
+    res.status(200).json({ game, msg: 'Attack action successful' });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// @desc    Healing potion - heal a random amount up to full health
+// @route   PUT /api/v1/game/healingpotion
+// @access  Private
+
+exports.healingpotion = asyncHandler(async (req, res, next) => {
+  try {
+    let game = await Game.findById(req.body.game.id);
+    if (!game) return res.status(404).json({ msg: 'not authorized' });
+
+    // Make sure user owns contact
+    // Possibly change L34 to req.user.id?
+    if (game.user.toString() !== req.body.user.id) {
+      return res.status(401).json({ msg: 'Not authorized' });
+    }
+
+    const health_increase = Math.floor(Math.random() * (100 - game.userhealth));
+    const user_damage = Math.floor(
+      Math.random() * (game.userhealth + health_increase)
+    );
+
+    game.userhealth = game.userhealth - user_damage + health_increase;
+
+    game = await Game.findByIdAndUpdate(
+      req.body.game.id,
+      { $set: game },
+      { new: true }
+    );
+
+    res.status(200).json({ game, msg: 'Attack action successful' });
   } catch (err) {
     next(err);
   }
