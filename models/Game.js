@@ -6,7 +6,7 @@ const GameSchema = new mongoose.Schema({
     default: 100,
     required: true
   },
-  playerhealth: {
+  userhealth: {
     type: Number,
     default: 100,
     required: true

@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const errorHandler = require('./middleware/error');
 const cookieParser = require('cookie-parser');
+const logger = require('./middleware/logger');
 
 //Use for logging - delete later if not required
 
@@ -30,6 +31,8 @@ app.use(express.json());
 
 // Cookie parser
 app.use(cookieParser());
+
+app.use(logger);
 
 //Mount routers
 app.use('/api/v1/auth', auth);

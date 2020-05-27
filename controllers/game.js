@@ -13,7 +13,12 @@ exports.creategame = asyncHandler(async (req, res, next) => {
     const newGame = new Game({ user: req.body.user.id });
     const game = await newGame.save();
 
-    res.status(200).json({ game: game, msg: 'Game created' });
+    const log = req.log;
+    const comm = `New game was created by ${req.body.user.avatar}`;
+
+    log.info(comm);
+
+    res.status(200).json({ game: game, comm: comm });
   } catch (err) {
     next(err);
   }
@@ -25,7 +30,7 @@ exports.creategame = asyncHandler(async (req, res, next) => {
 
 exports.attack = asyncHandler(async (req, res, next) => {
   try {
-    let game = await Game.findById(req.body.game.id);
+    let game = await Game.findById(req.body.game._id);
     //let game = await Game.findById('5ece3e501eab4f0ebf1c3c03');
 
     if (!game) return res.status(404).json({ msg: 'not authorized' });
@@ -43,15 +48,19 @@ exports.attack = asyncHandler(async (req, res, next) => {
     game.userhealth = Math.max(game.userhealth - covid_damage, 0);
     game.covidhealth = Math.max(game.covidhealth - user_damage, 0);
 
+    const log = req.log;
+    const comm = `(ATTACK) Player deals ${user_damage} damage, receives ${covid_damage} damage`;
     game = await Game.findByIdAndUpdate(
       req.body.game.id,
       { $set: game },
       { new: true }
     );
 
+    log.info(comm);
+
     GameEndTest(game, res);
 
-    res.status(200).json({ game, msg: 'Attack action successful' });
+    res.status(200).json({ game, comm });
   } catch (err) {
     next(err);
   }
@@ -63,13 +72,13 @@ exports.attack = asyncHandler(async (req, res, next) => {
 
 exports.powerattack = asyncHandler(async (req, res, next) => {
   try {
-    let game = await Game.findById(req.body.game.id);
+    let game = await Game.findById(req.body.game._id);
     if (!game) return res.status(404).json({ msg: 'not authorized' });
 
     // Make sure user owns contact
     // Possibly change L34 to req.user.id?
-    if (game.user.toString() !== req.body.user.id) {
-      return res.status(401).json({ msg: 'Not authorized' });
+    if (game.user.toString() !== req.body.user._id) {
+      return res.status(401).json({ msg: 'not authorized' });
     }
 
     const covid_damage = Math.floor(Math.random() * 21) + 10;
@@ -77,6 +86,9 @@ exports.powerattack = asyncHandler(async (req, res, next) => {
 
     game.userhealth = Math.max(game.userhealth - covid_damage, 0);
     game.covidhealth = Math.max(game.covidhealth - user_damage, 0);
+
+    const log = req.log;
+    const comm = `(POWER ATTACK) Player deals ${user_damage} damage, receives ${covid_damage} damage`;
 
     game = await Game.findByIdAndUpdate(
       req.body.game.id,
@@ -86,7 +98,7 @@ exports.powerattack = asyncHandler(async (req, res, next) => {
 
     GameEndTest(game, res);
 
-    res.status(200).json({ game, msg: 'Attack action successful' });
+    res.status(200).json({ game, comm });
   } catch (err) {
     next(err);
   }
@@ -98,12 +110,12 @@ exports.powerattack = asyncHandler(async (req, res, next) => {
 
 exports.healingpotion = asyncHandler(async (req, res, next) => {
   try {
-    let game = await Game.findById(req.body.game.id);
+    let game = await Game.findById(req.body.game._id);
     if (!game) return res.status(404).json({ msg: 'not authorized' });
 
     // Make sure user owns contact
     // Possibly change L34 to req.user.id?
-    if (game.user.toString() !== req.body.user.id) {
+    if (game.user.toString() !== req.body.user._id) {
       return res.status(401).json({ msg: 'Not authorized' });
     }
 
@@ -117,6 +129,9 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
       0
     );
 
+    const log = req.log;
+    const comm = `(HEALING POTION) Player receives ${health_increase} health and ${covid_damage} damage`;
+
     game = await Game.findByIdAndUpdate(
       req.body.game.id,
       { $set: game },
@@ -125,7 +140,7 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
 
     GameEndTest(game, res);
 
-    res.status(200).json({ game, msg: 'Attack action successful' });
+    res.status(200).json({ game, comm });
   } catch (err) {
     next(err);
   }

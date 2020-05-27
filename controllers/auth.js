@@ -64,10 +64,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
   try {
     const user = await User.findOne({ avatar }).select();
-    res.status(200).json({
-      success: true,
-      data: user
-    });
+    sendTokenResponse(user, 200, res);
   } catch (err) {
     next(err);
   }
