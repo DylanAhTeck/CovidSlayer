@@ -113,6 +113,7 @@ const AuthState = props => {
         register,
         loadUser,
         loginUser,
+        logout,
         clearErrors
       }}
     >
