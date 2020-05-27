@@ -42,7 +42,7 @@ const AuthState = props => {
         payload: res.data
       });
 
-      //loadUser();
+      loadUser();
     } catch (err) {
       dispatch({
         type: REGISTER_FAIL,
@@ -58,7 +58,7 @@ const AuthState = props => {
     }
     try {
       const res = await axios.get('/api/v1/auth/login');
-      console.log('here');
+
       dispatch({
         type: USER_LOADED,
         payload: res.data

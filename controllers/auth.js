@@ -60,30 +60,32 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @access  Private
 
 exports.getUser = asyncHandler(async (req, res, next) => {
-  const user = req.user;
+  const avatar = req.avatar;
 
-  console.log(user);
-  res.status(200).json({
-    success: true,
-    data: user
-  });
+  try {
+    const user = await User.findOne({ avatar }).select();
+    res.status(200).json({
+      success: true,
+      data: user
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 const sendTokenResponse = (user, statusCode, res) => {
   // Create token
   const token = user.getSignedJwtToken();
 
-  const options = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
-    )
-  };
+  // Take out cookies
+  // const options = {
+  //   expires: new Date(
+  //     Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+  //   )
+  // };
 
-  res
-    .status(statusCode)
-    .cookie('token', token, options)
-    .json({
-      success: true,
-      token
-    });
+  res.status(statusCode).json({
+    success: true,
+    token
+  });
 };
