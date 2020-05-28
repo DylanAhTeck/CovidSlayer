@@ -83,6 +83,7 @@ const sendTokenResponse = (user, statusCode, res) => {
 
   res.status(statusCode).json({
     success: true,
+    user,
     token
   });
 };

@@ -2,27 +2,32 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import GameContext from '../../context/game/gameContext';
+import AuthContext from '../../context/auth/authContext';
 
 const Button = ({ action: action }) => {
   const gameContext = useContext(GameContext);
+  const authContext = useContext(AuthContext);
   const {
     createGame,
     attack,
     powerattack,
     healingpotion,
-    surrender
+    surrender,
+    game
   } = gameContext;
+
+  const { user } = authContext;
 
   const doAction = () => {
     switch (action.id) {
       case 0:
-        return attack();
+        return attack(game);
       case 1:
-        return powerattack();
+        return powerattack(game);
       case 2:
-        return healingpotion();
+        return healingpotion(game);
       case 3:
-        return surrender();
+        return surrender(game);
     }
   };
 

@@ -11,6 +11,7 @@ import AuthState from './context/auth/AuthState';
 import GameState from './context/game/GameState';
 
 import setAuthToken from './utils/setAuthToken';
+import PrivateRoute from './components/route/PrivateRoute';
 
 import './App.css';
 

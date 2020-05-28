@@ -1,15 +1,23 @@
 import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../context/auth/authContext';
+import GameContext from '../../context/game/gameContext';
 import Button from '../game/Button';
 
 const Home = props => {
+  const gameContext = useContext(GameContext);
+  const authContext = useContext(AuthContext);
+
+  const { loadUser, user } = authContext;
+  const { createGame } = gameContext;
+
   useEffect(() => {
-    //
+    loadUser();
     //props.history.push('/game');
   }, []);
 
   const startGame = () => {
+    createGame(user);
     props.history.push('/game');
   };
 
@@ -21,7 +29,7 @@ const Home = props => {
         </h1>
       </div>
       <div class='text-center'>
-        <button type='button' class='btn btn-primary' onClick={startGame}>
+        <button type='button' className='btn btn-primary' onClick={startGame}>
           Play
         </button>
       </div>

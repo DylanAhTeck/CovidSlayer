@@ -14,8 +14,8 @@ import {
 
 const GameState = props => {
   const initialState = {
-    userhealth: '0',
-    covidhealth: '0',
+    userhealth: '100',
+    covidhealth: '100',
     actions: [
       {
         action: 'Attack',
@@ -34,15 +34,30 @@ const GameState = props => {
         id: 3
       }
     ],
+    commentary: [],
+    game: null,
+    user: null,
     error: null
+  };
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
   };
 
   const [state, dispatch] = useReducer(GameReducer, initialState);
 
   // Create Game
-  const createGame = async () => {
+  const createGame = async user => {
     try {
-      const res = await axios.post('/api/v1/game/creategame');
+      const res = await axios.post(
+        '/api/v1/game/creategame',
+        {
+          user
+        },
+        config
+      );
       dispatch({
         type: CREATE_GAME,
         payload: res.data
@@ -56,9 +71,9 @@ const GameState = props => {
   };
 
   // Attack
-  const attack = async () => {
+  const attack = async game => {
     try {
-      const res = await axios.post('/api/v1/game/attack');
+      const res = await axios.post('/api/v1/game/attack', { game }, config);
       dispatch({
         type: ATTACK,
         payload: res.data
@@ -72,9 +87,13 @@ const GameState = props => {
   };
 
   // Power attack
-  const powerattack = async () => {
+  const powerattack = async game => {
     try {
-      const res = await axios.post('/api/v1/game/powerattack');
+      const res = await axios.post(
+        '/api/v1/game/powerattack',
+        { game },
+        config
+      );
       dispatch({
         type: POWER_ATTACK,
         payload: res.data
@@ -87,10 +106,14 @@ const GameState = props => {
     }
   };
 
-  // Power attack
-  const healingpotion = async () => {
+  // Healing potion
+  const healingpotion = async game => {
     try {
-      const res = await axios.post('/api/v1/game/healingpotion');
+      const res = await axios.post(
+        '/api/v1/game/healingpotion',
+        { game },
+        config
+      );
       dispatch({
         type: HEALING_POTION,
         payload: res.data
@@ -104,9 +127,9 @@ const GameState = props => {
   };
 
   // Surrender
-  const surrender = async () => {
+  const surrender = async game => {
     try {
-      const res = await axios.post('/api/v1/game/surrender');
+      const res = await axios.post('/api/v1/game/surrender', { game }, config);
       dispatch({
         type: SURRENDER,
         payload: res.data
@@ -126,6 +149,8 @@ const GameState = props => {
         covidhealth: state.covidhealth,
         error: state.error,
         actions: state.actions,
+        game: state.game,
+        createGame,
         attack,
         powerattack,
         healingpotion,

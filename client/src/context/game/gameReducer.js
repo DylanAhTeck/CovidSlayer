@@ -6,41 +6,26 @@ import {
   SURRENDER,
   GAME_ERROR
 } from '../types';
+import { access } from 'fs';
 
 export default (state, action) => {
   switch (action.type) {
     case CREATE_GAME:
       return {
         ...state,
-        comm: action.payload
+        ...action.payload,
+        game: action.payload.game
       };
-    //   case REGISTER_SUCCESS:
-    //   case LOGIN_SUCCESS:
-    //     localStorage.setItem('token', action.payload.token);
-    //     return {
-    //       ...state,
-    //       ...action.payload,
-    //       isAuthenticated: true,
-    //       loading: false
-    //     };
-    //   case REGISTER_FAIL:
-    //   case AUTH_ERROR:
-    //   case LOGIN_FAIL:
-    //   case LOGOUT:
-    //     localStorage.removeItem('token');
-    //     return {
-    //       ...state,
-    //       token: null,
-    //       isAuthenticated: false,
-    //       loading: false,
-    //       user: null,
-    //       error: action.payload
-    //     };
-    //   case CLEAR_ERRORS:
-    //     return {
-    //       ...state,
-    //       error: null
-    //     };
+    case ATTACK:
+    case POWER_ATTACK:
+    case SURRENDER:
+    case HEALING_POTION:
+      return {
+        ...state,
+        ...action.payload,
+        comm: [action.payload.comm, ...state.commentary]
+      };
+
     default:
       return state;
   }

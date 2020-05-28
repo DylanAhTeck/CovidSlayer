@@ -58,7 +58,6 @@ const AuthState = props => {
     }
     try {
       const res = await axios.get('/api/v1/auth/login');
-
       dispatch({
         type: USER_LOADED,
         payload: res.data

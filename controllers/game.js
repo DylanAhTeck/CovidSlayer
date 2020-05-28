@@ -10,13 +10,14 @@ const ErrorResponse = require('../utils/errorResponse');
 exports.creategame = asyncHandler(async (req, res, next) => {
   try {
     // Create user
-    const newGame = new Game({ user: req.body.user.id });
+
+    const newGame = new Game({ user: req.body.user._id });
     const game = await newGame.save();
 
     const log = req.log;
     const comm = `New game was created by ${req.body.user.avatar}`;
 
-    log.info(comm);
+    console.log(comm);
 
     res.status(200).json({ game: game, comm: comm });
   } catch (err) {
@@ -35,13 +36,6 @@ exports.attack = asyncHandler(async (req, res, next) => {
 
     if (!game) return res.status(404).json({ msg: 'not authorized' });
 
-    // Make sure user owns contact
-    // Possibly change L34 to req.user.id?
-
-    // if (game.user.toString() !== req.body.user.id) {
-    //   return res.status(401).json({ msg: 'Not authorized' });
-    // }
-
     const covid_damage = Math.floor(Math.random() * 11);
     const user_damage = Math.floor(Math.random() * 11);
 
@@ -51,7 +45,7 @@ exports.attack = asyncHandler(async (req, res, next) => {
     const log = req.log;
     const comm = `(ATTACK) Player deals ${user_damage} damage, receives ${covid_damage} damage`;
     game = await Game.findByIdAndUpdate(
-      req.body.game.id,
+      req.body.game._id,
       { $set: game },
       { new: true }
     );
@@ -75,12 +69,6 @@ exports.powerattack = asyncHandler(async (req, res, next) => {
     let game = await Game.findById(req.body.game._id);
     if (!game) return res.status(404).json({ msg: 'not authorized' });
 
-    // Make sure user owns contact
-    // Possibly change L34 to req.user.id?
-    if (game.user.toString() !== req.body.user._id) {
-      return res.status(401).json({ msg: 'not authorized' });
-    }
-
     const covid_damage = Math.floor(Math.random() * 21) + 10;
     const user_damage = Math.floor(Math.random() * 21) + 10;
 
@@ -91,7 +79,7 @@ exports.powerattack = asyncHandler(async (req, res, next) => {
     const comm = `(POWER ATTACK) Player deals ${user_damage} damage, receives ${covid_damage} damage`;
 
     game = await Game.findByIdAndUpdate(
-      req.body.game.id,
+      req.body.game._id,
       { $set: game },
       { new: true }
     );
@@ -113,12 +101,6 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
     let game = await Game.findById(req.body.game._id);
     if (!game) return res.status(404).json({ msg: 'not authorized' });
 
-    // Make sure user owns contact
-    // Possibly change L34 to req.user.id?
-    if (game.user.toString() !== req.body.user._id) {
-      return res.status(401).json({ msg: 'Not authorized' });
-    }
-
     const health_increase = Math.floor(Math.random() * (100 - game.userhealth));
     const user_damage = Math.floor(
       Math.random() * (game.userhealth + health_increase)
@@ -133,7 +115,7 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
     const comm = `(HEALING POTION) Player receives ${health_increase} health and ${covid_damage} damage`;
 
     game = await Game.findByIdAndUpdate(
-      req.body.game.id,
+      req.body.game._id,
       { $set: game },
       { new: true }
     );
@@ -155,19 +137,13 @@ exports.surrender = asyncHandler(async (req, res, next) => {
     let game = await Game.findById(req.body.game._id);
     if (!game) return res.status(404).json({ msg: 'not authorized' });
 
-    // Make sure user owns contact
-    // Possibly change L34 to req.user.id?
-    if (game.user.toString() !== req.body.user._id) {
-      return res.status(401).json({ msg: 'Not authorized' });
-    }
-
     game.userhealth = 0;
 
     const log = req.log;
     const comm = `GAME OVER. The player surrenders.`;
 
     game = await Game.findByIdAndUpdate(
-      req.body.game.id,
+      req.body.game._id,
       { $set: game },
       { new: true }
     );
