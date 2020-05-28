@@ -11,6 +11,7 @@ export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 // For games
 export const CREATE_GAME = 'CREATE_GAME';
 export const ATTACK = 'ATTACK';
-export const POWERATTACK = 'POWERATTACK';
-export const HEALINGPOTION = 'HEALINGPOTION';
+export const POWER_ATTACK = 'POWER_ATTACK';
+export const HEALING_POTION = 'HEALING_POTION';
 export const SURRENDER = 'SURRENDER';
+export const GAME_ERROR = 'GAME_ERROR';
