@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const errorHandler = require('./middleware/error');
 const cookieParser = require('cookie-parser');
 const logger = require('./middleware/logger');
+const chalk = require('chalk');
 
 //Use for logging - delete later if not required
 
@@ -43,7 +44,9 @@ app.use(errorHandler);
 const server = app.listen(
   PORT,
   console.log(
-    `Server running in ${process.env.NODE_ENV} on port ${process.env.PORT}`
+    chalk.yellowBright.underline(
+      `Server running in ${process.env.NODE_ENV} on port ${process.env.PORT}`
+    )
   )
 );
 
