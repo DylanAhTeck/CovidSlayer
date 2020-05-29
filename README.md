@@ -2,6 +2,10 @@
 
 > Full stack MERN COVID Slayer app.
 
+## Deployed game:
+
+[a link] https://gentle-retreat-37689.herokuapp.com/
+
 ## Usage
 
 Install dependencies
