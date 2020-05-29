@@ -1,16 +1,15 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Button from '../game/Button';
 import List from '../game/List';
 
 import GameContext from '../../context/game/gameContext';
 import AuthContext from '../../context/auth/authContext';
-import { LOAD_GAME } from '../../context/types';
 
 const Game = props => {
-  const gameContext = useContext(GameContext);
   const authContext = useContext(AuthContext);
+  const gameContext = useContext(GameContext);
 
-  const { loadUser, user } = authContext;
+  const { user } = authContext;
 
   const {
     covidhealth,
@@ -23,13 +22,12 @@ const Game = props => {
   } = gameContext;
 
   useEffect(() => {
-    if (!game) loadGame(user);
-
-    if (game && (game.covidhealth == 0 || game.userhealth == 0)) {
-      if (game) alert(commentary[0]);
+    if (game && (game.covidhealth === 0 || game.userhealth === 0)) {
+      //Recheck
       clearGame();
-      console.log(game);
-      props.history.push('/');
+
+      if (commentary.length) alert(commentary[0]);
+      if (commentary.length) props.history.push('/');
     }
   });
 

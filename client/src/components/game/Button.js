@@ -1,14 +1,11 @@
-//
-import React, { useContext, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 import GameContext from '../../context/game/gameContext';
 import AuthContext from '../../context/auth/authContext';
 
-const Button = ({ action: action }) => {
+const Button = ({ action }) => {
   const gameContext = useContext(GameContext);
   const authContext = useContext(AuthContext);
   const {
-    createGame,
     attack,
     powerattack,
     healingpotion,
@@ -17,25 +14,23 @@ const Button = ({ action: action }) => {
     loadGame
   } = gameContext;
 
-  // useEffect(() => {
-  //   loadGame();
-  // }, [game, loadGame]);
-
   const { user } = authContext;
 
-  const doAction = () => {
+  const doAction = async () => {
     switch (action.id) {
       case 0:
-        attack(game);
+        await attack(game);
         return loadGame(user);
       case 1:
-        powerattack(game);
+        await powerattack(game);
         return loadGame(user);
       case 2:
-        healingpotion(game);
+        await healingpotion(game);
         return loadGame(user);
       case 3:
-        surrender(game);
+        await surrender(game);
+        return loadGame(user);
+      default:
         return loadGame(user);
     }
   };

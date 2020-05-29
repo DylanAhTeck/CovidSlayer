@@ -47,7 +47,7 @@ Each game commentary is stored in a log file in the log folder.
   Allows a registered user to login using (unique) Avatar and Password.
 
 - Create Game:
-  User creates a new game to slay the COVID monster
+  User creates a new game to slay the COVID monster.
 
 - Attack:
   The Player attacks the COVID Monster and inflicts between 0-10 damage.

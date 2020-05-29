@@ -1,8 +1,6 @@
 import React, { useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import AuthContext from '../../context/auth/authContext';
 import GameContext from '../../context/game/gameContext';
-import Button from '../game/Button';
 
 const Home = props => {
   const gameContext = useContext(GameContext);
@@ -12,9 +10,9 @@ const Home = props => {
   const { createGame } = gameContext;
 
   useEffect(() => {
-    loadUser();
+    if (!user) loadUser();
     //props.history.push('/game');
-  }, []);
+  }, [loadUser]);
 
   const startGame = () => {
     createGame(user);

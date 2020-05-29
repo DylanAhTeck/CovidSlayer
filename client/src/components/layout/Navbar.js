@@ -28,7 +28,7 @@ const Navbar = ({ title, icon }) => {
     <Fragment>
       <li>
         <a onClick={onLogout} href='/login'>
-          Logout
+          <i className='fas fa-sign-out-alt' /> Logout
         </a>
       </li>
     </Fragment>

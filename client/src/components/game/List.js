@@ -1,11 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { FixedSizeList } from 'react-window';
-import PropTypes from 'prop-types';
 import GameContext from '../../context/game/gameContext';
 
 const List = ({ comm }) => {
   const gameContext = useContext(GameContext);
-  const { commentary, game, loadGame } = gameContext;
+  //const { commentary, game, loadGame } = gameContext;
+  const { commentary } = gameContext;
 
   // useEffect(() => {
   //   loadGame();

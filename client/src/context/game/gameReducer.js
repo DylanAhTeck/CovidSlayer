@@ -8,7 +8,6 @@ import {
   GAME_ERROR,
   CLEAR_GAME
 } from '../types';
-import { access } from 'fs';
 
 export default (state, action) => {
   switch (action.type) {
@@ -17,7 +16,8 @@ export default (state, action) => {
       return {
         ...state,
         ...action.payload,
-        game: action.payload.game
+        game: action.payload.game,
+        game_end: false
       };
     case ATTACK:
     case POWER_ATTACK:
@@ -36,6 +36,15 @@ export default (state, action) => {
         commentary: [],
         userhealth: '100',
         covidhealth: '100'
+      };
+    case GAME_ERROR:
+      return {
+        ...state,
+        game: null,
+        commentary: [],
+        userhealth: '100',
+        covidhealth: '100',
+        err: 'Game error occured'
       };
 
     default:

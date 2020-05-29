@@ -110,7 +110,7 @@ exports.powerattack = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @desc    Healing potion - heal a random amount up to full health
+// @desc    Healing potion - heal between 0-10, also damaged between 0-10
 // @route   PUT /api/v1/game/healingpotion
 // @access  Private
 
@@ -119,18 +119,16 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
     let game = await Game.findById(req.body.game._id);
     if (!game) return res.status(404).json({ msg: 'not authorized' });
 
-    const health_increase = Math.floor(Math.random() * (100 - game.userhealth));
-    const user_damage = Math.floor(
-      Math.random() * (game.userhealth + health_increase)
-    );
+    const health_increase = Math.floor(Math.random() * 11);
+    const health_damage = Math.floor(Math.random() * 11);
 
     game.userhealth = Math.max(
-      game.userhealth - user_damage + health_increase,
+      game.userhealth - health_damage + health_increase,
       0
     );
 
     const log = req.log;
-    const comm = `(HEALING POTION) Player receives ${health_increase} health and ${user_damage} damage`;
+    const comm = `(HEALING POTION) Player receives ${health_increase} health and ${health_damage} damage`;
 
     log.info(comm);
 
@@ -140,7 +138,7 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
       { new: true }
     );
 
-    if (game.userhealth <= 0 || game.covidhealth <= 0) {
+    if (game.userhealth <= 0) {
       GameEnd(game, res);
     } else {
       res.status(200).json({ game, comm });
