@@ -13,13 +13,15 @@ const List = ({ comm }) => {
 
   // console.log(commentary);
 
-  const Row = ({ index }) => <div style={{}}>{commentary[index]}</div>;
+  const Row = ({ index, style }) => (
+    <div style={style}>{commentary[index]}</div>
+  );
 
   return (
     <FixedSizeList
       height={250}
       width={1000}
-      itemSize={50}
+      itemSize={25}
       itemCount={commentary.length}
     >
       {Row}

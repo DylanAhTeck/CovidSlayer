@@ -17,8 +17,7 @@ const Game = props => {
     actions,
     game,
     commentary,
-    clearGame,
-    loadGame
+    clearGame
   } = gameContext;
 
   useEffect(() => {

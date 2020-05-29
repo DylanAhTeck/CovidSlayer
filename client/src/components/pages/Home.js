@@ -11,8 +11,7 @@ const Home = props => {
 
   useEffect(() => {
     if (!user) loadUser();
-    //props.history.push('/game');
-  }, [loadUser]);
+  }, [loadUser, user]);
 
   const startGame = () => {
     createGame(user);

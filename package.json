@@ -23,7 +23,7 @@
     "mocha": "^7.2.0"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "NODE_ENV=test mocha",
     "start": "NODE_ENV=production node server",
     "server": "nodemon server",
     "client": "npm start --prefix client",
