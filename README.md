@@ -4,7 +4,7 @@
 
 ## Deployed game:
 
-[a link] https://gentle-retreat-37689.herokuapp.com/
+https://gentle-retreat-37689.herokuapp.com/
 
 ## Usage
 
