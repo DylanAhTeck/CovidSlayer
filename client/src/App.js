@@ -11,7 +11,7 @@ import AuthState from './context/auth/AuthState';
 import GameState from './context/game/GameState';
 
 import setAuthToken from './utils/setAuthToken';
-import PrivateRoute from './components/route/PrivateRoute';
+import PrivateRoute from './components/routing/PrivateRoute';
 
 import './App.css';
 
@@ -28,8 +28,8 @@ const App = () => {
             <Navbar />
             <div className='container'>
               <Switch>
-                <Route exact path='/' component={Home} />
-                <Route exact path='/game' component={Game} />
+                <PrivateRoute exact path='/' component={Home} />
+                <PrivateRoute exact path='/game' component={Game} />
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/login' component={Login} />
               </Switch>

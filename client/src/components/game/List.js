@@ -1,28 +1,28 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { FixedSizeList } from 'react-window';
+import PropTypes from 'prop-types';
+import GameContext from '../../context/game/gameContext';
 
-const items = [
-  'Player 1 attack Covid, rexeives 23 damage',
-  2,
-  3,
-  4,
-  5,
-  6,
-  7,
-  8,
-  9,
-  10
-]; // some list of items
+const List = ({ comm }) => {
+  const gameContext = useContext(GameContext);
+  const { commentary, game, loadGame } = gameContext;
 
-const List = nope => {
-  const Row = ({ index }) => <div style={{}}>{items[index]}</div>;
+  console.log(commentary);
+  console.log(comm);
+  // useEffect(() => {
+  //   loadGame();
+  // }, [loadGame]);
+
+  // console.log(commentary);
+
+  const Row = ({ index }) => <div style={{}}>{commentary[index]}</div>;
 
   return (
     <FixedSizeList
       height={250}
       width={1000}
-      itemSize={35}
-      itemCount={items.length}
+      itemSize={50}
+      itemCount={commentary.length}
     >
       {Row}
     </FixedSizeList>

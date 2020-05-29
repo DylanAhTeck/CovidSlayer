@@ -4,6 +4,7 @@ import {
   POWER_ATTACK,
   HEALING_POTION,
   SURRENDER,
+  LOAD_GAME,
   GAME_ERROR
 } from '../types';
 import { access } from 'fs';
@@ -11,6 +12,7 @@ import { access } from 'fs';
 export default (state, action) => {
   switch (action.type) {
     case CREATE_GAME:
+    case LOAD_GAME:
       return {
         ...state,
         ...action.payload,
@@ -23,7 +25,7 @@ export default (state, action) => {
       return {
         ...state,
         ...action.payload,
-        comm: [action.payload.comm, ...state.commentary]
+        commentary: [action.payload.comm, ...state.commentary]
       };
 
     default:

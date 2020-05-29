@@ -4,13 +4,26 @@ import List from '../game/List';
 
 import GameContext from '../../context/game/gameContext';
 import AuthContext from '../../context/auth/authContext';
+import { LOAD_GAME } from '../../context/types';
 
 const Game = () => {
   const gameContext = useContext(GameContext);
+  const authContext = useContext(AuthContext);
 
-  const { covidhealth, userhealth, actions, game, comm } = gameContext;
+  const { loadUser, user } = authContext;
 
-  //Add a useEffect loadGame
+  const {
+    covidhealth,
+    userhealth,
+    actions,
+    game,
+    comm,
+    loadGame
+  } = gameContext;
+
+  // useEffect(() => {
+  //   loadGame(user);
+  // });
 
   return (
     <div>
@@ -34,7 +47,7 @@ const Game = () => {
         ))}
       </div>
       <div className='grid-2 bg-light m-1'>
-        <List items={comm}></List>
+        <List comm={comm}></List>
       </div>
     </div>
   );

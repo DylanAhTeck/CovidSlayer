@@ -9,7 +9,8 @@ import {
   POWER_ATTACK,
   HEALING_POTION,
   SURRENDER,
-  GAME_ERROR
+  GAME_ERROR,
+  LOAD_GAME
 } from '../types';
 
 const GameState = props => {
@@ -142,6 +143,22 @@ const GameState = props => {
     }
   };
 
+  // loadGame
+  const loadGame = async user => {
+    try {
+      const res = await axios.get('/api/v1/game/getgame', config);
+      dispatch({
+        type: LOAD_GAME,
+        payload: res.data
+      });
+    } catch (err) {
+      dispatch({
+        type: GAME_ERROR,
+        payload: err.response.msg
+      });
+    }
+  };
+
   return (
     <GameContext.Provider
       value={{
@@ -150,11 +167,13 @@ const GameState = props => {
         error: state.error,
         actions: state.actions,
         game: state.game,
+        commentary: state.commentary,
         createGame,
         attack,
         powerattack,
         healingpotion,
-        surrender
+        surrender,
+        loadGame
       }}
     >
       {props.children}

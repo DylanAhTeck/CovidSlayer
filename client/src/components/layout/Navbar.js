@@ -9,7 +9,6 @@ const Navbar = ({ title, icon }) => {
   const { isAuthenticated, logout } = authContext;
 
   const onLogout = () => {
-    // Need to do this!
     logout();
   };
 
@@ -28,7 +27,7 @@ const Navbar = ({ title, icon }) => {
   const authLinks = (
     <Fragment>
       <li>
-        <a onClick={onLogout} href='!#'>
+        <a onClick={onLogout} href='/login'>
           Logout
         </a>
       </li>

@@ -4,7 +4,8 @@ const {
   attack,
   powerattack,
   healingpotion,
-  surrender
+  surrender,
+  getgame
 } = require('../controllers/game');
 
 const { protect } = require('../middleware/auth');
@@ -15,5 +16,6 @@ router.post('/attack', protect, attack);
 router.post('/powerattack', protect, powerattack);
 router.post('/healingpotion', protect, healingpotion);
 router.post('/surrender', protect, surrender);
+router.get('/getgame', protect, getgame);
 
 module.exports = router;

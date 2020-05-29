@@ -28,7 +28,7 @@ const Home = props => {
           Welcome to <span className='text-primary'>COVID Slayer!</span>
         </h1>
       </div>
-      <div class='text-center'>
+      <div className='text-center'>
         <button type='button' className='btn btn-primary' onClick={startGame}>
           Play
         </button>

@@ -26,6 +26,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add an avatar'],
     unique: true
+  },
+  current_game: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Game',
+    required: false
   }
 });
 

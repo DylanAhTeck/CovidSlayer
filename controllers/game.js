@@ -1,4 +1,5 @@
 const Game = require('../models/Game');
+const User = require('../models/User');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 
@@ -11,15 +12,26 @@ exports.creategame = asyncHandler(async (req, res, next) => {
   try {
     // Create user
 
-    const newGame = new Game({ user: req.body.user._id });
+    const user = req.body.user;
+    const avatar = req.body.user.avatar;
+
+    const newGame = new Game({ user: user._id });
     const game = await newGame.save();
+
+    user.current_game = game._id;
+
+    const updated_user = await User.findByIdAndUpdate(
+      user._id,
+      { $set: user },
+      { new: true }
+    );
 
     const log = req.log;
     const comm = `New game was created by ${req.body.user.avatar}`;
 
     console.log(comm);
 
-    res.status(200).json({ game: game, comm: comm });
+    res.status(200).json({ game: game, user: updated_user, comm: comm });
   } catch (err) {
     next(err);
   }
@@ -52,9 +64,11 @@ exports.attack = asyncHandler(async (req, res, next) => {
 
     log.info(comm);
 
-    GameEndTest(game, res);
-
-    res.status(200).json({ game, comm });
+    if (game.userhealth <= 0 || game.covidhealth <= 0) {
+      GameEnd(game, res);
+    } else {
+      res.status(200).json({ game, comm });
+    }
   } catch (err) {
     next(err);
   }
@@ -84,9 +98,13 @@ exports.powerattack = asyncHandler(async (req, res, next) => {
       { new: true }
     );
 
-    GameEndTest(game, res);
+    log.info(comm);
 
-    res.status(200).json({ game, comm });
+    if (game.userhealth <= 0 || game.covidhealth <= 0) {
+      GameEnd(game, res);
+    } else {
+      res.status(200).json({ game, comm });
+    }
   } catch (err) {
     next(err);
   }
@@ -112,7 +130,9 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
     );
 
     const log = req.log;
-    const comm = `(HEALING POTION) Player receives ${health_increase} health and ${covid_damage} damage`;
+    const comm = `(HEALING POTION) Player receives ${health_increase} health and ${user_damage} damage`;
+
+    log.info(comm);
 
     game = await Game.findByIdAndUpdate(
       req.body.game._id,
@@ -120,9 +140,11 @@ exports.healingpotion = asyncHandler(async (req, res, next) => {
       { new: true }
     );
 
-    GameEndTest(game, res);
-
-    res.status(200).json({ game, comm });
+    if (game.userhealth <= 0 || game.covidhealth <= 0) {
+      GameEnd(game, res);
+    } else {
+      res.status(200).json({ game, comm });
+    }
   } catch (err) {
     next(err);
   }
@@ -148,17 +170,46 @@ exports.surrender = asyncHandler(async (req, res, next) => {
       { new: true }
     );
 
-    res.status(200).json({ game, comm });
+    log.info(comm);
+    if (game.userhealth <= 0 || game.covidhealth <= 0) {
+      GameEnd(game, res);
+    } else {
+      res.status(200).json({ game, comm });
+    }
   } catch (err) {
     next(err);
   }
 });
 
-const GameEndTest = (game, res) => {
+const GameEnd = (game, res) => {
   if (game.userhealth <= 0 && game.covidhealth > 0)
-    res.status(200).json({ game, end: true, winner: 'covid' });
+    res
+      .status(200)
+      .json({ game, end: true, winner: 'covid', comm: 'Covid wins!' });
   else if (game.userhealth > 0 && game.covidhealth <= 0)
-    res.status(200).json({ game, end: true, winner: 'user' });
+    res
+      .status(200)
+      .json({ game, end: true, winner: 'user', comm: 'Player wins!' });
   else if (game.userhealth <= 0 && game.covidhealth <= 0)
-    res.status(200).json({ game, end: true, winner: 'none' });
+    res
+      .status(200)
+      .json({ game, end: true, winner: 'none', comm: 'Both lose!' });
 };
+
+// @desc    Get current game
+// @route   GET /api/v1/game/getgame
+// @access  Private
+
+exports.getgame = asyncHandler(async (req, res, next) => {
+  try {
+    const avatar = req.avatar;
+
+    const user = await User.findOne({ avatar }).select();
+
+    const current_game = await Game.findById(user.current_game);
+
+    res.status(200).json({ game: current_game });
+  } catch (err) {
+    next(err);
+  }
+});
