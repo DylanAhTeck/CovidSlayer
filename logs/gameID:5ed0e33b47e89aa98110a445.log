@@ -1,7 +1,0 @@
-{"message":"(ATTACK) Player deals 2 damage, receives 5 damage","level":"info"}
-{"message":"(ATTACK) Player deals 2 damage, receives 1 damage","level":"info"}
-{"message":"(ATTACK) Player deals 4 damage, receives 10 damage","level":"info"}
-{"message":"(ATTACK) Player deals 7 damage, receives 2 damage","level":"info"}
-{"message":"(HEALING POTION) Player receives 1 health and 0 damage","level":"info"}
-{"message":"(HEALING POTION) Player receives 1 health and 10 damage","level":"info"}
-{"message":"You surrendered! Game over.","level":"info"}
