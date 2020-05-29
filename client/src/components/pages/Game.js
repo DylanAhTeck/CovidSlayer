@@ -6,7 +6,7 @@ import GameContext from '../../context/game/gameContext';
 import AuthContext from '../../context/auth/authContext';
 import { LOAD_GAME } from '../../context/types';
 
-const Game = () => {
+const Game = props => {
   const gameContext = useContext(GameContext);
   const authContext = useContext(AuthContext);
 
@@ -17,27 +17,35 @@ const Game = () => {
     userhealth,
     actions,
     game,
-    comm,
+    commentary,
+    clearGame,
     loadGame
   } = gameContext;
 
-  // useEffect(() => {
-  //   loadGame(user);
-  // });
+  useEffect(() => {
+    if (!game) loadGame(user);
+
+    if (game && (game.covidhealth == 0 || game.userhealth == 0)) {
+      if (game) alert(commentary[0]);
+      clearGame();
+      console.log(game);
+      props.history.push('/');
+    }
+  });
 
   return (
     <div>
       <div className='grid-2 bg-light text-center x-large'>
         <div>
           <div className='card bg-success medium'>
-            <h1>Player</h1>
-            <h3> Health:{userhealth}</h3>
+            <h1>{user.avatar.length <= 6 ? user.avatar : 'Player'}</h1>
+            <h3> Health:{game ? game.userhealth : userhealth}</h3>
           </div>
         </div>
         <div>
           <div className='card bg-danger medium '>
             <h1>COVID</h1>
-            <h3> Health:{covidhealth}</h3>
+            <h3> Health:{game ? game.covidhealth : covidhealth}</h3>
           </div>
         </div>
       </div>
@@ -47,7 +55,7 @@ const Game = () => {
         ))}
       </div>
       <div className='grid-2 bg-light m-1'>
-        <List comm={comm}></List>
+        <List commentary={commentary}></List>
       </div>
     </div>
   );

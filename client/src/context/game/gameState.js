@@ -10,6 +10,7 @@ import {
   HEALING_POTION,
   SURRENDER,
   GAME_ERROR,
+  CLEAR_GAME,
   LOAD_GAME
 } from '../types';
 
@@ -159,6 +160,12 @@ const GameState = props => {
     }
   };
 
+  const clearGame = () => {
+    dispatch({
+      type: CLEAR_GAME
+    });
+  };
+
   return (
     <GameContext.Provider
       value={{
@@ -173,7 +180,8 @@ const GameState = props => {
         powerattack,
         healingpotion,
         surrender,
-        loadGame
+        loadGame,
+        clearGame
       }}
     >
       {props.children}

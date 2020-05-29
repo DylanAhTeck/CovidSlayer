@@ -1,0 +1,4 @@
+{"message":"(ATTACK) Player deals 10 damage, receives 0 damage","level":"info"}
+{"message":"(POWER ATTACK) Player deals 16 damage, receives 20 damage","level":"info"}
+{"message":"(HEALING POTION) Player receives 5 health and 33 damage","level":"info"}
+{"message":"You surrendered! Game over.","level":"info"}

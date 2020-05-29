@@ -2,7 +2,7 @@ const Game = require('../models/Game');
 const User = require('../models/User');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
-
+const chalk = require('chalk');
 // @desc    Create Game
 // @route   POST /api/v1/game/creategame
 // @access  Private
@@ -29,7 +29,7 @@ exports.creategame = asyncHandler(async (req, res, next) => {
     const log = req.log;
     const comm = `New game was created by ${req.body.user.avatar}`;
 
-    console.log(comm);
+    console.log(chalk.yellow.underline(comm + '. Logging to begin:'));
 
     res.status(200).json({ game: game, user: updated_user, comm: comm });
   } catch (err) {
@@ -162,7 +162,7 @@ exports.surrender = asyncHandler(async (req, res, next) => {
     game.userhealth = 0;
 
     const log = req.log;
-    const comm = `GAME OVER. The player surrenders.`;
+    const comm = `You surrendered! Game over.`;
 
     game = await Game.findByIdAndUpdate(
       req.body.game._id,
@@ -171,11 +171,8 @@ exports.surrender = asyncHandler(async (req, res, next) => {
     );
 
     log.info(comm);
-    if (game.userhealth <= 0 || game.covidhealth <= 0) {
-      GameEnd(game, res);
-    } else {
-      res.status(200).json({ game, comm });
-    }
+
+    res.status(200).json({ game, comm });
   } catch (err) {
     next(err);
   }
@@ -183,17 +180,11 @@ exports.surrender = asyncHandler(async (req, res, next) => {
 
 const GameEnd = (game, res) => {
   if (game.userhealth <= 0 && game.covidhealth > 0)
-    res
-      .status(200)
-      .json({ game, end: true, winner: 'covid', comm: 'Covid wins!' });
+    res.status(200).json({ game, comm: 'Covid wins!' });
   else if (game.userhealth > 0 && game.covidhealth <= 0)
-    res
-      .status(200)
-      .json({ game, end: true, winner: 'user', comm: 'Player wins!' });
+    res.status(200).json({ game, comm: 'Player wins!' });
   else if (game.userhealth <= 0 && game.covidhealth <= 0)
-    res
-      .status(200)
-      .json({ game, end: true, winner: 'none', comm: 'Both lose!' });
+    res.status(200).json({ game, comm: 'Both lose!' });
 };
 
 // @desc    Get current game

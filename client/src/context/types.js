@@ -16,3 +16,4 @@ export const HEALING_POTION = 'HEALING_POTION';
 export const SURRENDER = 'SURRENDER';
 export const GAME_ERROR = 'GAME_ERROR';
 export const LOAD_GAME = 'LOAD_GAME';
+export const CLEAR_GAME = 'CLEAR_GAME';

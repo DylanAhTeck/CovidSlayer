@@ -30,7 +30,7 @@ const Home = props => {
       </div>
       <div className='text-center'>
         <button type='button' className='btn btn-primary' onClick={startGame}>
-          Play
+          Start New Game
         </button>
       </div>
     </div>

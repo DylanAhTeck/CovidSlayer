@@ -7,8 +7,6 @@ const List = ({ comm }) => {
   const gameContext = useContext(GameContext);
   const { commentary, game, loadGame } = gameContext;
 
-  console.log(commentary);
-  console.log(comm);
   // useEffect(() => {
   //   loadGame();
   // }, [loadGame]);
