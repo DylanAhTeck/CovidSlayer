@@ -27,6 +27,7 @@
     "start": "NODE_ENV=production node server",
     "server": "nodemon server",
     "client": "npm start --prefix client",
+    "client-install": "npm install --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
