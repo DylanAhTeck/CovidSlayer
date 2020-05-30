@@ -64,7 +64,8 @@ const AuthState = props => {
       });
     } catch (err) {
       dispatch({
-        type: AUTH_ERROR
+        type: AUTH_ERROR,
+        payload: err.response.data.error
       });
     }
   };
@@ -88,8 +89,8 @@ const AuthState = props => {
       loadUser();
     } catch (err) {
       dispatch({
-        type: LOGIN_FAIL
-        //Add message here
+        type: LOGIN_FAIL,
+        payload: err.response.data.error
       });
     }
   };
