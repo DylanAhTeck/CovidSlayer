@@ -1,6 +1,6 @@
-# GSI COVID SLayer
+# COVID SLayer
 
-> Full stack MERN COVID Slayer app.
+> Full stack MERN COVID Slayer app, built for fun in 48 hours. 
 
 ## Deployed game:
 
